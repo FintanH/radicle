@@ -1,20 +1,12 @@
 version: 2
 jobs:
   build:
-    macos:
-      xcode: "10.0.0"
     steps:
       - checkout
 
       - restore_cache:
           keys:
             - toolchain-{{ arch }}
-
-      - restore_cache:
-          keys:
-            - homebrew-{{ epoch }}
-            - homebrew-
-            - homebrew
 
       - run:
           name: Setup Toolchain
@@ -49,18 +41,6 @@ jobs:
           paths:
             - "~/.ghcup"
             - /usr/local/bin/stack
-
-      - run:
-          name: Homebrew Dependencies
-          command: |
-            brew update
-            brew bundle
-            echo 'export PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"' >> $BASH_ENV
-
-      - save_cache:
-          key: homebrew-{{ epoch }}
-          paths:
-            - /usr/local/Homebrew
 
       - restore_cache:
           keys:
@@ -98,7 +78,7 @@ jobs:
             set -euxo pipefail
             TAG="$(git tag -l --points-at HEAD)"
             if [[ "$TAG" == v* ]]; then
-              VERSION="$TAG" TARGET=darwin ./packaging/build-package.sh
+              VERSION="$TAG" TARGET=arch ./packaging/build-package.sh
 
               # This is only set when building forked PRs
               if [ -n "${CIRCLE_PR_REPONAME-}" ]; then

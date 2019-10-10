@@ -15,7 +15,6 @@ ENVIRONMENT VARIABLES
 
     - debian
     - pacman
-    - darwin
 
   VERSION (required)
     Version of the package.
@@ -127,14 +126,6 @@ function package-debian () {
     --depends libgmp10 \
     --depends libc6 \
     --depends libncurses5
-}
-
-function package-darwin () {
-  radpath=/usr/local/lib/radicle/modules
-  radicle_bindir=/usr/local/lib/radicle/bin
-  tarball="$project_dir/packaging/out/radicle_${VERSION}_x86_64-darwin.tar.gz"
-  prepare-package-root
-  tar -czf "$tarball" -C "$package_root" .
 }
 
 
